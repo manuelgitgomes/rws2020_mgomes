@@ -28,7 +28,7 @@ class Player():
             rospy.logerr('My name is not in any team. I want to play!')
             exit(0)
 
-        rospy.logwarn('I am ' + self.player_name + ' and I am on team ' + self.my_team + '. And team ' + self.prey_team + ' are all going to die! Be careful with ' + self.hunter_team + ' team.')
+        rospy.logwarn('I am ' + self.player_name + ' and team ' + self.my_team + ' is the greatest. Team ' + self.prey_team + ' are all going to die! Be careful with ' + self.hunter_team + ' team.')
 
 
 

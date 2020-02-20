@@ -40,14 +40,27 @@ class Player:
         rospy.Subscriber("make_a_play", MakeAPlay, self.makeAPlayCallback)
         self.br = tf.TransformBroadcaster()
         self.transform = Transform()
-        Initial_R = 8 * random.random()
-        Initial_Theta = 2 * math.pi * random.random()
-        Initial_X = Initial_R * math.cos(Initial_Theta)
-        Initial_Y = Initial_R * math.sin(Initial_Theta)
-        Initial_Rotation = 2 * math.pi * random.random()
-        self.transform.translation.x = Initial_X
-        self.transform.translation.y = Initial_Y
-        self.transform.rotation= tf.transformations.quaternion_from_euler(0, 0, Initial_Rotation)
+        # Initial_R = 8 * random.random()
+        # Initial_Theta = 2 * math.pi * random.random()
+        # Initial_X = Initial_R * math.cos(Initial_Theta)
+        # Initial_Y = Initial_R * math.sin(Initial_Theta)
+        # Initial_Rotation = 2 * math.pi * random.random()
+        # self.transform.translation.x = Initial_X
+        # self.transform.translation.y = Initial_Y
+        # self.transform.rotation= tf.transformations.quaternion_from_euler(0, 0, Initial_Rotation)
+        self.transform.translation.x = 3
+        self.transform.translation.y = 3
+        self.transform.translation.z = 0
+
+    def makeAPlayCallback(self, msg):
+
+            self.max_vel = msg.turtle
+            self.max_angle = math.pi / 30
+            print('Received message make a play and my maximum velocity is ' + str(self.max_vel))
+            vel = self.max_vel
+            angle = self.max_angle
+            # self.br.sendTransform( (0,0,0))
+            self.move(self.transform, vel, angle)
 
     def move(self, transform_now, vel, angle):
 
@@ -92,21 +105,11 @@ class Player:
         self.transform.rotation = Quaternion(quat[0], quat[1], quat[2], quat[3])
         self.transform.translation.x = trans[0]
         self.transform.translation.y = trans[1]
-        self.transform.translation.z = trans[0]
+        self.transform.translation.z = trans[2]
 
         self.br.sendTransform(trans, quat, rospy.Time.now(),
                               self.player_name, "world")
 
-    def makeAPlayCallback(self, msg):
-        self.max_vel = msg.turtle
-        self.max_angle = math.pi / 30
-        print('Received message make a play and my maximum velocity is ' + str(self.max_vel))
-        vel = self.max_vel
-        angle = self.max_angle
-        # self.br.sendTransform( (0,0,0))
-        TDeslocamento = Transform()
-        TDeslocamento.rotation = tf.transformation.quaternion_from_euler(0,0,angle)
-        TDeslocamento.translation.x = vel
 
 
 

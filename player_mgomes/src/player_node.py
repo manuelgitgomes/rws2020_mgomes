@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from std_msgs.msg import String
 from rws2020_msgs.msg import MakeAPlay
+from visualization_msgs.msg import Marker
 
 # from rws2020_lib.utils import movePlayer, randomizePlayerPose, getDistanceAndAngleToTarget
 # from rws2020_moliveira.rws2020_lib.src.rws2020_lib.utils import movePlayer, randomizePlayerPose, getDistanceAndAngleToTarget
@@ -111,6 +112,20 @@ class Player:
     def __init__(self, player_name):
         self.player_name = player_name
         self.listener = tf.TransformListener()
+        self.m = Marker(ns=self.player_name, id=0, type=Marker.TEXT_VIEW_FACING, action=Marker.ADD)
+        self.m.header.frame_id = "mgomes"
+        self.m.header.stamp = rospy.Time.now()
+        self.m.pose.position.y = 1
+        self.m.pose.orientation.w = 1.0
+        self.m.scale.z = 0.4
+        self.m.color.a = 1.0
+        self.m.color.r = 0.0
+        self.m.color.g = 0.0
+        self.m.color.b = 0.0
+        self.m.text = "Bom dia!"
+        self.m.lifetime = rospy.Duration(3)
+        self.pub_bocas = rospy.Publisher('/bocas', Marker, queue_size=1)
+
         red_team = rospy.get_param('/red_team')
         green_team = rospy.get_param('/green_team')
         blue_team = rospy.get_param('/blue_team')
@@ -156,14 +171,26 @@ class Player:
                    target=target1
                    angle=angle1
 
+               # elif min_distance==0:
+               #     min_distance=1000
+
+
+
            vel = max_vel  # full throttle
            rospy.loginfo(self.player_name + ': Hunting ' + str(target) + '(' + str(distance) + ' away)')
+           self.m.header.stamp = rospy.Time.now()
+           self.m.text = 'Nao olhes para tras, ' + target
+           self.pub_bocas.publish(self.m)
         else:  # what else to do? Lets just move towards the center
             target = 'world'
             distance, angle = getDistanceAndAngleToTarget(self.listener, self.player_name, target)
             vel = max_vel  # full throttle
             rospy.loginfo(self.player_name + ': Moving to the center of the arena.')
             rospy.loginfo('I am ' + str(distance) + ' from ' + target)
+            self.m.header.stamp = rospy.Time.now()
+            self.m.text = 'De volta a base'
+            self.pub_bocas.publish(self.m)
+
 
         # Actually move the player
         movePlayer(self.br, self.player_name, self.transform, vel, angle, max_vel)

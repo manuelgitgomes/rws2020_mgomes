@@ -45,11 +45,11 @@ class Player:
         # Initial_X = Initial_R * math.cos(Initial_Theta)
         # Initial_Y = Initial_R * math.sin(Initial_Theta)
         # # Initial_Rotation = 2 * math.pi * random.random()
-        self.transform.translation.x = Initial_X
-        self.transform.translation.y = Initial_Y
+        # self.transform.translation.x = Initial_X
+        # self.transform.translation.y = Initial_Y
         # self.transform.rotation= tf.transformations.quaternion_from_euler(0, 0, Initial_Rotation)
-        self.transform.translation.x = 0
-        self.transform.translation.y = -3
+        self.transform.translation.x = 3
+        self.transform.translation.y = 3
         self.transform.translation.z = 0
 
     def makeAPlayCallback(self, msg):

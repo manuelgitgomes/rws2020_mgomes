@@ -161,15 +161,15 @@ class Player:
            distance, angle = getDistanceAndAngleToTarget(self.listener, self.player_name, target)
            if angle is None:
                angle = 0
-           for player in msg.green_alive:
-               target1 = player
-               distance1, angle1 = getDistanceAndAngleToTarget(self.listener,
-                                                             self.player_name, target1)
-               if distance1 < min_distance:
-                   min_distance=distance1
-                   distance=min_distance
-                   target=target1
-                   angle=angle1
+           # for player in msg.green_alive:
+           #     target1 = player
+           #     distance1, angle1 = getDistanceAndAngleToTarget(self.listener,
+           #                                                   self.player_name, target1)
+           #     if distance1 < min_distance:
+           #         min_distance=distance1
+           #         distance=min_distance
+           #         target=target1
+           #         angle=angle1
            vel = max_vel  # full throttle
            rospy.loginfo(self.player_name + ': Hunting ' + str(target) + '(' + str(distance) + ' away)')
            self.m.header.stamp = rospy.Time.now()

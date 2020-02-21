@@ -170,12 +170,6 @@ class Player:
                    distance=min_distance
                    target=target1
                    angle=angle1
-
-               # elif min_distance==0:
-               #     min_distance=1000
-
-
-
            vel = max_vel  # full throttle
            rospy.loginfo(self.player_name + ': Hunting ' + str(target) + '(' + str(distance) + ' away)')
            self.m.header.stamp = rospy.Time.now()

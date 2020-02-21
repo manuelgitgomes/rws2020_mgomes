@@ -140,18 +140,24 @@ class Player:
 
 
     def makeAPlayCallBack(self, msg):
-
-        max_vel, max_angle = msg.turtle, math.pi / 30
-
+        max_vel, max_angle, min_distance = msg.turtle, math.pi / 30, 1000
         if msg.green_alive:  # PURSUIT MODE: Follow any green player (only if there is at least one green alive)
-            target = msg.green_alive[0]  # select the first alive green player (I am hunting green)
-            distance, angle = getDistanceAndAngleToTarget(self.listener,
-                                                          self.player_name, target)
+           target = msg.green_alive[0]
+           distance, angle = getDistanceAndAngleToTarget(self.listener, self.player_name, target)
+           if angle is None:
+               angle = 0
+           for player in msg.green_alive:
+               target1 = player
+               distance1, angle1 = getDistanceAndAngleToTarget(self.listener,
+                                                             self.player_name, target1)
+               if distance1 < min_distance:
+                   min_distance=distance1
+                   distance=min_distance
+                   target=target1
+                   angle=angle1
 
-            if angle is None:
-                angle = 0
-            vel = max_vel  # full throttle
-            rospy.loginfo(self.player_name + ': Hunting ' + str(target) + '(' + str(distance) + ' away)')
+           vel = max_vel  # full throttle
+           rospy.loginfo(self.player_name + ': Hunting ' + str(target) + '(' + str(distance) + ' away)')
         else:  # what else to do? Lets just move towards the center
             target = 'world'
             distance, angle = getDistanceAndAngleToTarget(self.listener, self.player_name, target)

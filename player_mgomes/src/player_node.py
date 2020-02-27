@@ -144,7 +144,15 @@ class Player:
         self.warp_server = rospy.Service('~warp', Warp, self.warpServiceCallback)  # start the server
 
     def warpServiceCallback(self, req):
-        rospy.loginfo("someone called the service for " + req.player)
+        rospy.loginfo("someone called the service for " + req)
+
+        quat = (0, 0, 0, 1)
+        trans = (req.x, req.y, 0)
+        self.br.sendTransform(trans, quat, rospy.Time.now(), self.player_name, "world")
+
+        response = WarpResponse()
+        response.success = True
+        return response
 
 
     def makeAPlayCallBack(self, msg):
